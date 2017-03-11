@@ -17,23 +17,32 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-    body {
-        background-color: linen;
-    }
-
-    h1 {
-        color: maroon;
-        margin-left: 40px;
-    } 
     img {
         max-height:100vh;
+    }
+    h1 {
+        text-align:center;
+    }
+    .container {
+        max-width:1080px;
     }
     </style>
 </head>
 <body>
-    <h1>Hello, world!</h1>
-    <img style="-webkit-user-select: none;" src="http://bymy.selfip.com:8081/">
-    <button onclick="moreBubbles()">More Bubbles</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-cs-12">
+                <h1>Make the World a More Bubbly Place!</h1>
+            </div>
+            <div class="col-xs-12">
+                <img class="img-responsive img-thumbnail" style="-webkit-user-select: none;" src="http://bymy.selfip.com:8081/">
+            </div>
+            <div class="col-xs-12">
+                <button id="bubblesButton" class="btn btn-primary btn-lg btn-block" onclick="moreBubbles()">More Bubbles</button>
+            </div>
+        </div>
+        
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -48,19 +57,21 @@
 
             particle.getEventStream({ deviceId: deviceId, auth: token }).then(function(stream) {
               stream.on('alexboldit_bubbles_status', function(data) {
-                console.log("Event: " + data);
+                console.log("Event: " + JSON.stringify(data));
+                document.getElementById("bubblesButton").disabled = (data.data == "on");
               });
             });
 
             // Get the bubbles state
             $.get('https://api.particle.io/v1/devices/3b003b000747343232363230/bubblesOn?access_token=a4b2caee461af9eb3ddf1f4fec22db59b760f652', function(data){
                 // Enable/disable the button
-                $('#temperature').html(data.result);
+                document.getElementById("bubblesButton").disabled = (data.result == "true");
             });
 
 
             moreBubbles = function() {
                 console.log("more bubbles");
+                document.getElementById("bubblesButton").disabled = true;
                 particle.publishEvent({ name: 'alexboldit_bubbles_command', data: "bubbles", auth: token });
             }
 
