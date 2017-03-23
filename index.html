@@ -72,8 +72,10 @@
             moreBubbles = function() {
                 console.log("more bubbles");
                 document.getElementById("bubblesButton").disabled = true;
-                particle.publishEvent({ name: 'alexboldit_bubbles_command', data: "bubbles", auth: token });
-
+                // particle.publishEvent({ name: 'alexboldit_bubbles_command', data: "bubbles", auth: token });
+                $.post("https://api.particle.io/v1/devices/3b003b000747343232363230/bubbles?access_token=a4b2caee461af9eb3ddf1f4fec22db59b760f652", {}, function(data) {
+                    
+                })
                 // Analytics
                 ga('send', 'event', 'Bubbles', 'pressed', 'bubbles Campaign');
             }
